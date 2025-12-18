@@ -1,0 +1,5 @@
+# FastFlow Dependencies
+pandas>=2.0.0
+numpy>=1.20.0
+networkx>=2.5
+matplotlib>=3.0.0
