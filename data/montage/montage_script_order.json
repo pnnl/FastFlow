@@ -1,0 +1,164 @@
+{
+    "mProject": {
+        "stage_order": 1,
+        "parallelism": 16,
+        "num_tasks": 16,
+        "predecessors": {
+            "initial_data": {
+                "inputs": [
+                    "poss2ukstu_blue_[0-9]+_[0-9]+\\.fits",
+                    "region-oversized\\.hdr"
+                ]
+            }
+        },
+        "outputs": [
+            "pposs2ukstu_blue_[0-9]+_[0-9]+\\.fits",
+            "pposs2ukstu_blue_[0-9]+_[0-9]+_area\\.fits"
+        ]
+    },
+    "mDiffFit": {
+        "stage_order": 2,
+        "parallelism": 120,
+        "num_tasks": 120,
+        "predecessors": {
+            "initial_data": {
+                "inputs": [
+                    "region-oversized\\.hdr"
+                ]
+            },
+            "mProject": {
+                "inputs": [
+                    "pposs2ukstu_blue_[0-9]+_[0-9]+\\.fits",
+                    "pposs2ukstu_blue_[0-9]+_[0-9]+_area\\.fits"
+                ]
+            }
+        },
+        "outputs": [
+            "1-fit\\.[0-9]+\\.[0-9]+\\.txt",
+            "1-diff\\.[0-9]+\\.[0-9]+\\.fits",
+            "1-diff\\.[0-9]+\\.[0-9]+_area\\.fits"
+        ]
+    },
+    "mConcatFit": {
+        "stage_order": 1,
+        "parallelism": 1,
+        "num_tasks": 1,
+        "predecessors": {
+            "initial_data": {
+                "inputs": [
+                    "1-stat\\.tbl"
+                ]
+            }
+        },
+        "outputs": [
+            "1-fits\\.tbl"
+        ]
+    },
+    "mBgModel": {
+        "stage_order": 2,
+        "parallelism": 1,
+        "num_tasks": 1,
+        "predecessors": {
+            "initial_data": {
+                "inputs": [
+                    "1-images\\.tbl"
+                ]
+            },
+            "mConcatFit": {
+                "inputs": [
+                    "1-fits\\.tbl"
+                ]
+            }
+        },
+        "outputs": [
+            "1-corrections\\.tbl"
+        ]
+    },
+    "mBackground": {
+        "stage_order": 3,
+        "parallelism": 16,
+        "num_tasks": 16,
+        "predecessors": {
+            "initial_data": {
+                "inputs": [
+                    "1-projected\\.tbl"
+                ]
+            },
+            "mProject": {
+                "inputs": [
+                    "pposs2ukstu_blue_[0-9]+_[0-9]+\\.fits"
+                ]
+            },
+            "mBgModel": {
+                "inputs": [
+                    "1-corrections\\.tbl"
+                ]
+            }
+        },
+        "outputs": [
+            "cposs2ukstu_blue_[0-9]+_[0-9]+\\.fits",
+            "cposs2ukstu_blue_[0-9]+_[0-9]+_area\\.fits"
+        ]
+    },
+    "mImgtbl": {
+        "stage_order": 4,
+        "parallelism": 1,
+        "num_tasks": 1,
+        "predecessors": {
+            "initial_data": {
+                "inputs": [
+                    "1-corrected\\.tbl"
+                ]
+            },
+            "mBackground": {
+                "inputs": [
+                    "cposs2ukstu_blue_[0-9]+_[0-9]+\\.fits"
+                ]
+            }
+        },
+        "outputs": [
+            "1-updated-corrected\\.tbl"
+        ]
+    },
+    "mAdd": {
+        "stage_order": 5,
+        "parallelism": 1,
+        "num_tasks": 1,
+        "predecessors": {
+            "initial_data": {
+                "inputs": [
+                    "region\\.hdr"
+                ]
+            },
+            "mImgtbl": {
+                "inputs": [
+                    "1-updated-corrected\\.tbl"
+                ]
+            },
+            "mBackground": {
+                "inputs": [
+                    "cposs2ukstu_blue_[0-9]+_[0-9]+_area\\.fits"
+                ]
+            }
+        },
+        "outputs": [
+            "1-mosaic\\.fits",
+            "1-mosaic_area\\.fits"
+        ]
+    },
+    "mViewer": {
+        "stage_order": 6,
+        "parallelism": 1,
+        "num_tasks": 1,
+        "predecessors": {
+            "mAdd": {
+                "inputs": [
+                    "1-mosaic\\.fits"
+                ]
+            }
+        },
+        "outputs": [
+            "1-mosaic\\.png"
+        ]
+    }
+}

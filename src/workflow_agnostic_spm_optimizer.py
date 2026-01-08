@@ -142,13 +142,13 @@ class WorkflowAgnosticSPMOptimizer:
 
     def extract_workflow_stage_transitions(self) -> Dict[Tuple[str, str], List[Dict]]:
         """
-        Extract actual stage transitions from DAG edges
+        Extract actual stage transitions from DAG edges, with JSON fallback for missing stages
         """
         print(f"Extracting workflow stage transitions from DAG...")
 
         stage_transitions = defaultdict(list)
 
-        # Analyze actual edges in the DAG to find producer-consumer relationships
+        # APPROACH 1: Analyze actual edges in the DAG to find producer-consumer relationships
         # We need to trace through data nodes to find task-to-task stage transitions
         for edge in self.dag_data['edges']:
             source_node = edge['source']
@@ -184,10 +184,56 @@ class WorkflowAgnosticSPMOptimizer:
                                     'edge_data': edge
                                 })
 
+        # APPROACH 2: Fallback to JSON dependencies if DAG analysis found no transitions
+        # This handles workflows where stages are missing from DAG due to incomplete CSV data
+        if len(stage_transitions) == 0:
+            print(f"  No transitions found in DAG, extracting from JSON dependencies...")
+            json_transitions = self._extract_transitions_from_json_dependencies()
+            stage_transitions.update(json_transitions)
+
         print(f"  Found {len(stage_transitions)} unique stage transitions:")
         for transition, edges in stage_transitions.items():
             print(f"    {transition[0]} -> {transition[1]}: {len(edges)} edges")
 
+        return dict(stage_transitions)
+
+    def _extract_transitions_from_json_dependencies(self) -> Dict[Tuple[str, str], List[Dict]]:
+        """
+        Workflow-agnostic extraction of stage transitions from JSON dependencies
+        """
+        stage_transitions = defaultdict(list)
+
+        # Load original JSON dependencies from DAG metadata
+        if 'metadata' in self.dag_data and 'original_dependencies' in self.dag_data['metadata']:
+            dependencies = self.dag_data['metadata']['original_dependencies']
+        else:
+            print("    Warning: No JSON dependencies found in DAG metadata")
+            return {}
+
+        # Extract stage transitions from JSON predecessor relationships
+        for stage_name, stage_info in dependencies.items():
+            predecessors = stage_info.get('predecessors', {})
+
+            for predecessor_stage, predecessor_info in predecessors.items():
+                # Skip initial_data and other non-stage dependencies
+                if predecessor_stage != 'initial_data' and predecessor_stage in dependencies:
+                    transition = (predecessor_stage, stage_name)
+
+                    # Create a synthetic transition entry
+                    stage_transitions[transition].append({
+                        'producer_task': f"json_stage_{predecessor_stage}",
+                        'consumer_task': f"json_stage_{stage_name}",
+                        'data_file': f"json_dependency_{predecessor_stage}_to_{stage_name}",
+                        'producer_lineage': 'json_derived',
+                        'consumer_lineage': 'json_derived',
+                        'edge_data': {
+                            'source': f"json_stage_{predecessor_stage}",
+                            'target': f"json_stage_{stage_name}",
+                            'dependency_type': 'json_defined'
+                        }
+                    })
+
+        print(f"    Extracted {len(stage_transitions)} transitions from JSON dependencies")
         return dict(stage_transitions)
 
     def match_dag_transitions_to_spm_pairs(self, dag_transitions: Dict) -> Dict:

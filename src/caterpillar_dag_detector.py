@@ -260,6 +260,71 @@ class CaterpillarDAGDetector:
 
         return lineage_tasks
 
+    def detect_sequential_pipeline_structure(self, lineage_groups: Dict[str, Set[str]]) -> Dict[str, Set[str]]:
+        """
+        Detect if this workflow is a sequential pipeline rather than
+        parallel lineages and adjust lineage grouping accordingly
+        """
+        print(f"\nAnalyzing workflow structure for sequential vs parallel pattern...")
+
+        # Strategy 1: Check JSON stage ordering for sequential pattern
+        stage_orders = [stage_info.get('stage_order', 0) for stage_info in self.dependencies.values()]
+        max_stage_order = max(stage_orders) if stage_orders else 1
+        unique_stage_orders = len(set(stage_orders))
+
+        print(f"  Stage order analysis: {unique_stage_orders} unique orders, max order: {max_stage_order}")
+
+        # Strategy 2: Check for fan-in/fan-out patterns indicating sequential workflow
+        task_counts = {}
+        for stage_name, stage_info in self.dependencies.items():
+            task_counts[stage_name] = stage_info.get('num_tasks', 1)
+
+        # Sequential workflows often have: many parallel tasks → few aggregation tasks → many parallel tasks
+        min_tasks = min(task_counts.values()) if task_counts else 1
+        max_tasks = max(task_counts.values()) if task_counts else 1
+        task_variance = max_tasks / min_tasks if min_tasks > 0 else 1
+
+        print(f"  Task count analysis: {min_tasks} min, {max_tasks} max, {task_variance:.1f}x variance")
+
+        # Strategy 3: Check current lineage split quality
+        non_shared_lineages = {k: v for k, v in lineage_groups.items() if k != 'shared'}
+        lineage_count = len(non_shared_lineages)
+
+        print(f"  Current lineage split: {lineage_count} lineages detected")
+
+        # Detect sequential pipeline indicators:
+        # 1. More than 3 sequential stages (stage_order 1,2,3,4,5,6...)
+        # 2. High task count variance (some stages have 1 task, others have hundreds)
+        # 3. Few detected lineages (2-3) suggesting file pattern separation rather than true parallelism
+
+        is_sequential_pipeline = (
+            unique_stage_orders >= 4 and  # At least 4 sequential stages
+            max_stage_order >= 4 and      # Sequential ordering goes up to at least 4
+            task_variance >= 10 and       # High variance in task counts
+            lineage_count <= 3            # Few lineages detected by pattern matching
+        )
+
+        if is_sequential_pipeline:
+            print(f"  → Detected SEQUENTIAL PIPELINE workflow")
+            print(f"    Converting {lineage_count} pattern-based lineages into 1 sequential pipeline")
+
+            # Merge all non-shared lineages into a single sequential pipeline
+            merged_files = set()
+            for lineage_id, files in non_shared_lineages.items():
+                merged_files.update(files)
+
+            # Create new lineage structure with single pipeline
+            new_lineage_groups = {
+                'pipeline_1': merged_files,
+                'shared': lineage_groups.get('shared', set())
+            }
+
+            return new_lineage_groups
+        else:
+            print(f"  → Detected PARALLEL LINEAGES workflow")
+            print(f"    Keeping {lineage_count} pattern-based lineages")
+            return lineage_groups
+
     def build_workflow_dag(self):
         """
         Build DAG using JSON patterns and CSV data
@@ -274,6 +339,10 @@ class CaterpillarDAGDetector:
 
         # Group files by lineage using patterns
         lineage_groups = self.extract_lineage_groups_from_actual_files(variable_patterns)
+
+        # Check if this workflow is a sequential pipeline
+        # rather than parallel lineages workflow
+        lineage_groups = self.detect_sequential_pipeline_structure(lineage_groups)
 
         # Map tasks to lineages
         lineage_tasks = self.map_tasks_to_lineages(lineage_groups)
@@ -543,6 +612,7 @@ class CaterpillarDAGDetector:
             'metadata': {
                 'total_nodes': self.dag.number_of_nodes(),
                 'total_edges': self.dag.number_of_edges(),
+                'original_dependencies': self.dependencies  # Store JSON dependencies for workflow structure analysis
             },
             'nodes': {
                 node: {**self.dag.nodes[node], 'node_id': node}
