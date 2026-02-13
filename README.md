@@ -5,12 +5,11 @@ FastFlow
 =============================================================================
 
 **Home**:
-  - https://github.com/pnnl/DataLife
+  - [FastFlow](https://github.com/pnnl/FastFlow),
+    part of [DataFlowDrs](https://github.com/pnnl/DataFlowDrs)
   
-  - [Performance Lab for EXtreme Computing and daTa](https://github.com/perflab-exact)
+  - [Performance Lab for EXtreme Computing and daTa](https://github.com/PerfLab-EXaCT)
 
-  - Related: 
-  [DataFlowDrs](https://github.com/pnnl/DataFlowDrs)
 
 **About**: 
 
