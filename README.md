@@ -5,8 +5,7 @@ FastFlow
 =============================================================================
 
 **Home**:
-  - [FastFlow](https://github.com/pnnl/FastFlow),
-    part of [DataFlowDrs](https://github.com/pnnl/DataFlowDrs)
+  - [FastFlow](https://github.com/pnnl/FastFlow), part of [DataFlowDrs](https://github.com/pnnl/DataFlowDrs)
   
   - [Performance Lab for EXtreme Computing and daTa](https://github.com/PerfLab-EXaCT)
 
@@ -14,6 +13,9 @@ FastFlow
 **About**: 
 
 When distributed scientific workflows are not intelligently executed, they can fail time constraints. To improve workflow response time, FastFlow is a new method of scheduling that prioritizes critical flow paths and their interactions. The key insight is to use the global perspective of interacting critical flows to guide a fast (locally greedy) scheduler that uses data flow projections to select between the better of flow parallelism and flow locality. The result is a rapid, linear-time scheduling method that achieves high quality results and excels on data-intensive workflows.
+
+------------------------------------------------------------------------------
+## Contacts
 
 **Contacts**: (_firstname_._lastname_@pnnl.gov)
 
@@ -25,21 +27,16 @@ When distributed scientific workflows are not intelligently executed, they can f
 
 References
 -----------------------------------------------------------------------------
+- **Overview**: Nathan R. Tallent, Meng Tang, Zhen Peng, Jesun Firoz, Luanzheng Guo, Anthony Kougkas, and Xian-He Sun. "DataFlowDrs: Automating Performance Optimization of Data Flow Within HPC Workflows." IEEE Transactions on Parallel and Distributed Systems, Vol. 37, pp. 2619-2636, December 2026. ([doi: 10.1109/TPDS.2026.3722592](https://doi.org/10.1109/IPDPS65963.2026.00112))
 
-* H. Lee, L. Guo, M. Tang, J. Firoz, N. Tallent, A. Kougkas, and X.-H. Sun, “Data flow lifecycles for optimizing workflow coordination,” in Proc. of the Intl. Conf. for High Performance Computing, Networking, Storage and Analysis (SuperComputing), SC ’23, (New York, NY, USA), Association for Computing Machinery, November 2023. ([doi](https://doi.org/10.1145/3581784.3607104))
+* **Specific**: Jesun Firoz, Hyungro Lee, Luanzheng Guo, Meng Tang, Nathan R. Tallent, and Zhen Peng. "FastFlow: Rapid Workflow Response by Prioritizing Critical Data Flows and their Interactions." Proc. of the 37th Intl. Conf. on Scalable Scientific Data Management, SSDBM '25, pp. 1-12, ACM, June 2025. ([doi: 10.1145/3733723.3733735](https://doi.org/10.1145/3733723.3733735))
 
-* M. Tang, J. Cernuda, J. Ye, L. Guo, N. R. Tallent, A. Kougkas, and X.-H. Sun, “DaYu: Optimizing distributed scientific workflows by decoding dataflow semantics and dynamics,” in Proc. of the 2024 IEEE Conf. on Cluster Computing, pp. 357–369, IEEE, September 2024. ([doi](https://doi.org/10.1109/CLUSTER59578.2024.00038))
+- For all related references, see [DataFlowDrs](https://github.com/pnnl/DataFlowDrs)
 
-* L. Guo, H. Lee, J. Firoz, M. Tang, and N. R. Tallent, “Improving I/O-aware workflow scheduling via data flow characterization and trade-off analysis,” in Seventh IEEE Intl. Workshop on Benchmarking, Performance Tuning and Optimization for Big Data Applications (Proc. of the IEEE Intl. Conf. on Big Data), IEEE Computer Society, December 2024.  ([doi](https://doi.org/10.1109/BigData62323.2024.10825855))
 
-* H. Lee, J. Firoz, N. R. Tallent, L. Guo, and M. Halappanavar, “FlowForecaster: Automatically inferring detailed & interpretable workflow scaling models for forecasts,” in Proc. of the 39th IEEE Intl. Parallel and Distributed Processing Symp., IEEE Computer Society, June 2025. ([doi](https://doi.org/10.1109/IPDPS64566.2025.00045))
+## License
 
-* M. Tang, Z. Zhu, L. Guo, J. G. Bandy, T. Carlson, S. Neuwirth, A. Kougkas, X.-H. Sun, and N. R. Tallent, “Quantifying AWS S3 I/O performance boundaries using the roofline model,” in Proc. of the SC ’25 Workshops of the Intl. Conf. for High Performance Computing, Networking, Storage and Analysis (10th Intl Parallel Data Systems Workshop), (New York, NY, USA), pp. 1415–1423, Association for Computing Machinery, 11 2025. ([doi](https://doi.org/10.1145/3731599.3767513))
-
-* M. Tang, L. Guo, A. Kougkas, X.-H. Sun, and N. R. Tallent, “Characterization and implications of dataflow in HPC workflows,” in Proc. of the 40th IEEE Intl. Parallel and Distributed Processing Symp., IEEE Computer Society, May 2026.
-
-* M. H. Rashid, J. Firoz, N. R. Tallent, L. Guo, M. Tang, and D. Dai, “QoSFlow: Ensuring QoS of distributed workflows using interpretable sensitivity models,” in Proc. of the 40th IEEE Intl. Parallel and Distributed Processing Symp., IEEE Computer Society, May 2026.
-
+BSD 2-clause license: [README-License.txt](/README-License.txt)
 
 
 Acknowledgements
@@ -50,6 +47,7 @@ Advanced Scientific Computing Research:
 
 - Orchestration for Distributed & Data-Intensive Scientific Exploration
 
+------------------------------------------------------------------------------
 
 FastFlow Implementation
 =============================================================================
