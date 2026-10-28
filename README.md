@@ -1,8 +1,7 @@
 <!-- -*-Mode: markdown;-*- -->
 <!-- $Id: 8fa6cd46de144d84fc7d8e75968128d8d1c91c83 $ -->
 
-FastFlow
-=============================================================================
+# FastFlow
 
 **Home**:
   - [FastFlow](https://github.com/pnnl/FastFlow), part of [DataFlowDrs](https://github.com/pnnl/DataFlowDrs)
@@ -15,6 +14,7 @@ FastFlow
 When distributed scientific workflows are not intelligently executed, they can fail time constraints. To improve workflow response time, FastFlow is a new method of scheduling that prioritizes critical flow paths and their interactions. The key insight is to use the global perspective of interacting critical flows to guide a fast (locally greedy) scheduler that uses data flow projections to select between the better of flow parallelism and flow locality. The result is a rapid, linear-time scheduling method that achieves high quality results and excels on data-intensive workflows.
 
 ------------------------------------------------------------------------------
+
 ## Contacts
 
 **Contacts**: (_firstname_._lastname_@pnnl.gov)
@@ -25,11 +25,11 @@ When distributed scientific workflows are not intelligently executed, they can f
   - Meng Tang (Illinois Institute of Technology) ([www](https://scholar.google.com/citations?user=KXC9NesAAAAJ&hl=en))
 
 
-References
------------------------------------------------------------------------------
+## References
+
 - **Overview**: Nathan R. Tallent, Meng Tang, Zhen Peng, Jesun Firoz, Luanzheng Guo, Anthony Kougkas, and Xian-He Sun. "DataFlowDrs: Automating Performance Optimization of Data Flow Within HPC Workflows." IEEE Transactions on Parallel and Distributed Systems, Vol. 37, pp. 2619-2636, December 2026. ([doi: 10.1109/TPDS.2026.3722592](https://doi.org/10.1109/TPDS.2026.3722592))
 
-* **Specific**: Jesun Firoz, Hyungro Lee, Luanzheng Guo, Meng Tang, Nathan R. Tallent, and Zhen Peng. "FastFlow: Rapid Workflow Response by Prioritizing Critical Data Flows and their Interactions." Proc. of the 37th Intl. Conf. on Scalable Scientific Data Management, SSDBM '25, pp. 1-12, ACM, June 2025. ([doi: 10.1145/3733723.3733735](https://doi.org/10.1145/3733723.3733735))
+- **Specific**: Jesun Firoz, Hyungro Lee, Luanzheng Guo, Meng Tang, Nathan R. Tallent, and Zhen Peng. "FastFlow: Rapid Workflow Response by Prioritizing Critical Data Flows and their Interactions." Proc. of the 37th Intl. Conf. on Scalable Scientific Data Management, SSDBM '25, pp. 1-12, ACM, June 2025. ([doi: 10.1145/3733723.3733735](https://doi.org/10.1145/3733723.3733735))
 
 - For all related references, see [DataFlowDrs](https://github.com/pnnl/DataFlowDrs)
 
@@ -39,8 +39,7 @@ References
 BSD 2-clause license: [README-License.txt](/README-License.txt)
 
 
-Acknowledgements
------------------------------------------------------------------------------
+## Acknowledgements
 
 This work was supported by the U.S. Department of Energy's Office of
 Advanced Scientific Computing Research:
@@ -49,8 +48,7 @@ Advanced Scientific Computing Research:
 
 ------------------------------------------------------------------------------
 
-FastFlow Implementation
-=============================================================================
+# FastFlow Implementation
 
 Workflow-agnostic caterpillar DAG segmentation and SPM storage optimization implementation.
 
@@ -144,11 +142,13 @@ python src/workflow_agnostic_spm_optimizer.py \
 ## Output Files
 
 ### Step 1 Outputs (DAG Detection)
+
 - `<prefix>_flows.json` - Detected parallel flows and lineage information
 - `<prefix>_statistics.json` - Performance statistics per lineage
 - `<prefix>_dag.json` - Complete workflow DAG structure
 
 ### Step 2 Outputs (Optimization)
+
 - `<prefix>_results.json` - Full segmentation analysis with detailed metrics
 - `<prefix>_recommendations.json` - User-friendly storage optimization recommendations
 - `<prefix>_execution_plan_<scheduler>.json` - Ready-to-run scheduler execution plan
@@ -156,10 +156,12 @@ python src/workflow_agnostic_spm_optimizer.py \
 ## Command Line Options
 
 ### caterpillar_dag_detector.py
+
 - `-n, --nodes` - Number of compute nodes to analyze (filters CSV data)
 - `-o, --output` - Output prefix for generated files
 
 ### workflow_agnostic_spm_optimizer.py
+
 - `--segmented` - Enable FastFlow caterpillar segmentation
 - `--execution-plan` - Generate execution plan (nextflow, slurm, cwl, snakemake)
 - `-o, --output` - Output prefix for optimization results
@@ -167,6 +169,7 @@ python src/workflow_agnostic_spm_optimizer.py \
 ## Installation
 
 ### Prerequisites
+
 - Python 3.7+
 - Virtual environment support
 
@@ -185,6 +188,7 @@ pip install -r requirements.txt
 ```
 
 ### Dependencies
+
 - pandas - Data manipulation and analysis
 - numpy - Numerical computing
 - networkx - Graph analysis
