@@ -27,7 +27,7 @@ When distributed scientific workflows are not intelligently executed, they can f
 
 ## References
 
-- **Overview**: Nathan R. Tallent, Meng Tang, Zhen Peng, Jesun Firoz, Luanzheng Guo, Anthony Kougkas, and Xian-He Sun. "DataFlowDrs: Automating Performance Optimization of Data Flow Within HPC Workflows." IEEE Transactions on Parallel and Distributed Systems, Vol. 37, pp. 2619-2636, December 2026. ([doi: 10.1109/TPDS.2026.3722592](https://doi.org/10.1109/TPDS.2026.3722592))
+- **Overview Citation**: Nathan R. Tallent, Meng Tang, Zhen Peng, Jesun Firoz, Luanzheng Guo, Anthony Kougkas, and Xian-He Sun. "DataFlowDrs: Automating Performance Optimization of Data Flow Within HPC Workflows." IEEE Transactions on Parallel and Distributed Systems, Vol. 37, pp. 2619-2636, December 2026. ([doi: 10.1109/TPDS.2026.3722592](https://doi.org/10.1109/TPDS.2026.3722592))
 
 - **Specific**: Jesun Firoz, Hyungro Lee, Luanzheng Guo, Meng Tang, Nathan R. Tallent, and Zhen Peng. "FastFlow: Rapid Workflow Response by Prioritizing Critical Data Flows and their Interactions." Proc. of the 37th Intl. Conf. on Scalable Scientific Data Management, SSDBM '25, pp. 1-12, ACM, June 2025. ([doi: 10.1145/3733723.3733735](https://doi.org/10.1145/3733723.3733735))
 
@@ -174,6 +174,7 @@ python src/workflow_agnostic_spm_optimizer.py \
 - Virtual environment support
 
 ### Setup
+
 ```bash
 # 1. Clone repository
 git clone <repository_url>
